@@ -2,11 +2,11 @@
 Param
 (
     [Parameter(Mandatory=$true,Position=0)]
-    [String]$MOCN="",
+    [String]$vm="",
 	[Parameter(Mandatory=$true,Position=1)]
-	[String]$Drive=""
+	[String]$NewPath=""
 	
 )
-$dest="$Drive"+':\Program Files\Microsoft Learning\VMs\' + "$MOCN" +"\"+"Drives"+"\"
+#$dest="$Drive"+':\Program Files\Microsoft Learning\VMs\' + "$MOCN" +"\"+"Drives"+"\"
 
-Get-VM $MOCN*|Move-VMStorage -DestinationStoragePath ("$dest"+"$PSItem.Name")
+Get-VM $vm|Move-VMStorage -DestinationStoragePath ("$NewPath"+"\"+"{$_.Name}")
