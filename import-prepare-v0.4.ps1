@@ -36,7 +36,7 @@ Param
     [bool]$Unpack= $false,
 
     [Parameter(Mandatory=$false)]
-    [String]$DefaultPassword="Pa`$`$w0rd",    
+    [String]$Password="Pa`$`$w0rd",    
 
     [Parameter(Mandatory=$false)]
     [switch]$Restart
@@ -94,7 +94,7 @@ function prepare-vol ($vl,$filename,$content)
 	$regkey = "HKLM:\TempHive\Microsoft\Windows NT\CurrentVersion\Winlogon"
 	set-itemproperty -path $regkey -name AutoAdminLogon -value 1
 	set-itemproperty -path $regkey -name DefaultUserName -value $user
-	set-itemproperty -path $regkey -name DefaultPassword -value $Defaultpassword
+	set-itemproperty -path $regkey -name DefaultPassword -value $Password
 	set-itemproperty -path $regkey -name DefaultDomainName -value $domain
 	$regkey = "HKLM:\TempHive\Microsoft\Windows\CurrentVersion\RunOnce" 
 	set-itemproperty -Path $regkey  -name $filename -value "c:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\$filename"
