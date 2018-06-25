@@ -1,5 +1,5 @@
 ﻿# import-prepare-v0.4.ps1     #
-# Copyleft 2014               #
+# Copyleft 2018               #
 # A MOC Deploy Solution       #
 # Created by Dmitry Mischenko #
 # dmitrymis@outlook.com       #
@@ -9,12 +9,10 @@ Param
     [Parameter(Mandatory=$true,Position=0)]
     [String]$MOCN="1234A",
 
-    [Parameter(Mandatory=$false,Position=1)]
-    #[String]$SourcePath="\\dpc4\Microsoft Learning\moc",
+    [Parameter(Mandatory=$true,Position=1)]
 	[String]$SourcePath="d:\Microsoft Learning\moc",
     
     [Parameter(Mandatory=$false,Position=2)]
-    #[String]$DestPath="\\dpc4\Microsoft Learning\moc",
 	[String]$DestPath="C:\Program Files\Microsoft Learning",
                 
     [Parameter(Mandatory=$false)]
@@ -31,9 +29,6 @@ Param
     
     [Parameter(Mandatory=$false)]
     [switch]$NoStartingImage,
-
-    [Parameter(Mandatory=$false)]
-    [bool]$Unpack= $false,
 
     [Parameter(Mandatory=$false)]
     [String]$Password="Pa`$`$w0rd",    
@@ -191,23 +186,6 @@ foreach ($d in $dirs)
    
     }
 
-}
-
-
-#We can Unpack files or copy already unpacked files
-
-if ($Unpack -eq "True")
- {
- 
- if (Test-Path  "C:\Program Files\WinRAR\UnRaR.exe" )
- {
-  #Unrar file exists, so we can use it
-  cmd.exe -c "C:\Program Files\WinRAR\UnRaR.exe" x -r "$Source\*.exe" "$Dest"
- } 
-  elseif (Test-Path "C:\Program Files\7zip\7z.exe" )
- {
-  cmd.exe -c "C:\Program Files\7zip\7z.exe" x -o "$Dest" "$Source\*.exe"
- }
 }
 
 
