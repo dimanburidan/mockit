@@ -246,15 +246,16 @@ else
 # To make this script work please remove all Read-host and pause strings in original VM-Pre-Import-*.ps1 and *_ImportVirtualMachines.ps1 files, set $drive $drive2 variable with string "C".
 
 # Lets create VM networks for $MOC
-[string]$ps1filename =get-childitem ""$MSDir\$MOC\Drives\" -File CreateNetworkSwitches.ps1).Fullname
+[string]$ps1filename =(get-childitem "$MSDir\$MOC\Drives\" -File "CreateNetworkSwitches.ps1").Fullname
 powershell.exe -executionpolicy bypass -File "$ps1filename"
 
+
 # Lets attach VM vhd to Base and middle vhd
-[string]$ps1filename =get-childitem ""$MSDir\$MOC\Drives\" -File *VM-Pre-Import*.ps1).Fullname
+[string]$ps1filename =(get-childitem "$MSDir\$MOC\Drives\" -File "*VM-Pre-Import*.ps1").Fullname
 powershell.exe -executionpolicy bypass -File "$ps1filename"
 
 # Lets Import VMs
-[string]$ps1filename =get-childitem ""$MSDir\$MOC\Drives\" -File *ImportVirtualMach*.ps1).Fullname
+[string]$ps1filename =(get-childitem "$MSDir\$MOC\Drives\" -File "*ImportVirtualMach*.ps1").Fullname
 powershell.exe -executionpolicy bypass -File "$ps1filename"
 
 
