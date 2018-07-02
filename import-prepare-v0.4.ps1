@@ -131,10 +131,12 @@ Write-Host "Start time:" (Get-Date)
 #                  |     |       |-WS08R2-NYC-DC1.vhd
 
 $MSDir= "C:\Program Files\Microsoft Learning"
+mkdir "$MSDir"
 $MOC=$MOCN.Substring(0,$MOCN.Length-1)
-
+mkdir $MSDir
 [string]$Source= "$SourcePath\$MOCN"
 [string]$Dest="$DestPath\$MOC"
+mkdir "$Dest"
 
 
 ##
@@ -202,12 +204,16 @@ if (!(Test-Path $Source)) {throw "SourcePath seems do not exists or cannot conne
 if(!($NocopyBASE))
 {
 
-
+mkdir 
 # Check if hard links of Base files has already prepared with script Make-BaseHardlinks.bat
 # If subdir Base exist then copy from if else we will parse txt's.
- 
+   mkdir "$Dest"
+  mkdir "$Dest\Drives"
+  
 if (test-path "$Source\Base")
 	{
+	mkdir "$MSDir\Base"
+	mkdir "$MSDir\Base\Drives"
 	CopyFiles-Bits "$Source\Base" "$MSDir\Base"
 	}
 else
@@ -224,10 +230,12 @@ else
 		$VHDName = $TxtFile.Name.Substring(0,$Dot)+".vhd"
   		If ($VHDName -like "*Base*")
   			{
+			mkdir "$MSdir\Base\"
 			Start-BitsTransfer -Source "$SourcePath\Base\$VHDName" -Destination "$MSdir\Base\" -Description "to $MSdir\Base\$VHDName" -DisplayName "Copying $SourcePath\Base\$VHDName"
   			}
   		else
   			{
+			mkdir "$MSdir\Base\Drives\"
 			Start-BitsTransfer -Source "$SourcePath\Base\Drives\$VHDName" "$MSdir\Base\Drives\" -Description "to $MSdir\Base\Drives\$VHDName" -DisplayName "Copying $SourcePath\Base\Drives\$VHDName"
   			}
 		}
@@ -237,14 +245,17 @@ else
 
 # To make this script work please remove all Read-host and pause strings in original VM-Pre-Import-*.ps1 and *_ImportVirtualMachines.ps1 files, set $drive $drive2 variable with string "C".
 
-# Lets create VM networks for $MOC 
-powershell.exe -executionpolicy bypass -File "$MSDir\$MOC\Drives\CreateVirtualSwitches.ps1"
+# Lets create VM networks for $MOC
+[string]$ps1filename =get-childitem ""$MSDir\$MOC\Drives\" -File CreateNetworkSwitches.ps1).Fullname
+powershell.exe -executionpolicy bypass -File "$ps1filename"
 
-# Lets attach VM vhd to Base and middle vhd  
-powershell.exe -executionpolicy bypass -File "$MSDir\$MOC\Drives\VM-Pre-Import-$($MOCN).ps1"
+# Lets attach VM vhd to Base and middle vhd
+[string]$ps1filename =get-childitem ""$MSDir\$MOC\Drives\" -File *VM-Pre-Import*.ps1).Fullname
+powershell.exe -executionpolicy bypass -File "$ps1filename"
 
 # Lets Import VMs
-powershell.exe -executionpolicy bypass -File "$MSDir\$MOC\Drives\$($MOCN)_ImportVirtualMachines.ps1"
+[string]$ps1filename =get-childitem ""$MSDir\$MOC\Drives\" -File *ImportVirtualMach*.ps1).Fullname
+powershell.exe -executionpolicy bypass -File "$ps1filename"
 
 
 $vms = Get-VM "$MOCN*"
